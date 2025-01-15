@@ -6,36 +6,66 @@
     <title>Student Score Calculator</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 20px;
+            background-color: #2c2f36;
+            color: #e1e1e1;
         }
         .container {
             max-width: 600px;
             margin: 0 auto;
+            background-color: #3a4046;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        h1, h2, h3 {
+            color: #fff;
         }
         label, input, button, select {
             margin: 10px 0;
             display: block;
             width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #444c56;
+            border: 1px solid #666;
+            color: #fff;
+        }
+        input, select {
+            background-color: #4a535f;
+            color: #fff;
+        }
+        button {
+            background-color: #5a6f7a;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #4b5c66;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            background-color: #4a535f;
         }
         table, th, td {
-            border: 1px solid #ccc;
+            border: 1px solid #666;
         }
         th, td {
-            padding: 8px;
+            padding: 10px;
             text-align: center;
+        }
+        th {
+            background-color: #5a6f7a;
         }
         .manual {
             margin-top: 30px;
             font-size: 1.1em;
         }
         .manual h2 {
-            color: #333;
+            color: #fff;
         }
         .manual ul {
             list-style-type: none;
@@ -76,7 +106,7 @@
             <tbody id="resultsTable"></tbody>
         </table>
 
-        <h3>Total Score: <span id="totalScore">0</span> / <span id="totalMaxScore">0</span></h3>
+        <h3>Total Score: <span id="totalScore">0</span> / 10</h3>
 
         <div class="manual">
             <h2>How to Use the Calculator</h2>
@@ -96,7 +126,6 @@
         const activityInputsContainer = document.getElementById('activityInputs');
         const resultsTable = document.getElementById('resultsTable');
         const totalScoreElement = document.getElementById('totalScore');
-        const totalMaxScoreElement = document.getElementById('totalMaxScore');
 
         numActivitiesDropdown.addEventListener('change', generateActivityInputs);
 
@@ -138,23 +167,26 @@
             for (let i = 1; i <= numActivities; i++) {
                 const rawScore = parseFloat(document.getElementById(`activity${i}Score`).value) || 0;
                 const maxScore = parseFloat(document.getElementById(`activity${i}MaxScore`).value) || 1;
-                const weightedScore = (rawScore / maxScore * 10).toFixed(2);
 
-                totalScore += parseFloat(weightedScore);
-                totalMaxScore += 10; // Always considering the total as 10 for normalized score
+                totalMaxScore += maxScore;
+                const weightedScore = (rawScore / maxScore) * 10;
+
+                totalScore += weightedScore;
 
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>Activity ${i}</td>
                     <td>${rawScore}</td>
                     <td>${maxScore}</td>
-                    <td>${weightedScore}</td>
+                    <td>${weightedScore.toFixed(2)}</td>
                 `;
                 resultsTable.appendChild(row);
             }
 
-            totalScoreElement.textContent = totalScore.toFixed(2);
-            totalMaxScoreElement.textContent = totalMaxScore;
+            // Normalize the total score to 10
+            const normalizedTotalScore = (totalScore / totalMaxScore) * 10;
+
+            totalScoreElement.textContent = normalizedTotalScore.toFixed(2);
         }
 
         // Initialize with 1 activity
