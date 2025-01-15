@@ -30,6 +30,20 @@
             padding: 8px;
             text-align: center;
         }
+        .manual {
+            margin-top: 30px;
+            font-size: 1.1em;
+        }
+        .manual h2 {
+            color: #333;
+        }
+        .manual ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .manual li {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -63,6 +77,18 @@
         </table>
 
         <h3>Total Score: <span id="totalScore">0</span> / <span id="totalMaxScore">0</span></h3>
+
+        <div class="manual">
+            <h2>How to Use the Calculator</h2>
+            <ul>
+                <li><strong>Select the Number of Activities:</strong> Choose the number of activities you want to calculate scores for (1-5).</li>
+                <li><strong>Input Raw Scores:</strong> For each activity, enter the score you received.</li>
+                <li><strong>Input Max Scores:</strong> For each activity, enter the maximum possible score.</li>
+                <li><strong>Click "Calculate Total Score":</strong> Once all scores are entered, click the button to calculate the total weighted score.</li>
+                <li><strong>View the Results:</strong> A table will show the raw score, max score, and weighted score for each activity. The total score will be displayed at the bottom.</li>
+            </ul>
+            <h3>Created by: Sebastian de Leon</h3>
+        </div>
     </div>
 
     <script>
