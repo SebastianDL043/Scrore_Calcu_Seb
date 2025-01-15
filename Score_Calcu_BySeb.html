@@ -55,13 +55,14 @@
                 <tr>
                     <th>Activity</th>
                     <th>Raw Score</th>
+                    <th>Max Score</th>
                     <th>Weighted Score</th>
                 </tr>
             </thead>
             <tbody id="resultsTable"></tbody>
         </table>
 
-        <h3>Total Score: <span id="totalScore">0</span> / 10</h3>
+        <h3>Total Score: <span id="totalScore">0</span> / <span id="totalMaxScore">0</span></h3>
     </div>
 
     <script>
@@ -69,6 +70,7 @@
         const activityInputsContainer = document.getElementById('activityInputs');
         const resultsTable = document.getElementById('resultsTable');
         const totalScoreElement = document.getElementById('totalScore');
+        const totalMaxScoreElement = document.getElementById('totalMaxScore');
 
         numActivitiesDropdown.addEventListener('change', generateActivityInputs);
 
@@ -77,43 +79,56 @@
             activityInputsContainer.innerHTML = '';
 
             for (let i = 1; i <= numActivities; i++) {
-                const label = document.createElement('label');
-                label.textContent = `Activity ${i} Score (out of 10):`;
+                const label1 = document.createElement('label');
+                label1.textContent = `Activity ${i} Score:`;
 
-                const input = document.createElement('input');
-                input.type = 'number';
-                input.id = `activity${i}`;
-                input.min = 0;
-                input.max = 10;
+                const input1 = document.createElement('input');
+                input1.type = 'number';
+                input1.id = `activity${i}Score`;
+                input1.min = 0;
 
-                activityInputsContainer.appendChild(label);
-                activityInputsContainer.appendChild(input);
+                const label2 = document.createElement('label');
+                label2.textContent = `Activity ${i} Max Score (out of):`;
+
+                const input2 = document.createElement('input');
+                input2.type = 'number';
+                input2.id = `activity${i}MaxScore`;
+                input2.min = 1;
+
+                activityInputsContainer.appendChild(label1);
+                activityInputsContainer.appendChild(input1);
+                activityInputsContainer.appendChild(label2);
+                activityInputsContainer.appendChild(input2);
             }
         }
 
         function calculateScore() {
             const numActivities = parseInt(numActivitiesDropdown.value);
-            const pointsPerActivity = (10 / numActivities).toFixed(2);
             let totalScore = 0;
+            let totalMaxScore = 0;
 
             resultsTable.innerHTML = '';
 
             for (let i = 1; i <= numActivities; i++) {
-                const rawScore = parseFloat(document.getElementById(`activity${i}`).value) || 0;
-                const weightedScore = (rawScore / 10 * pointsPerActivity).toFixed(2);
+                const rawScore = parseFloat(document.getElementById(`activity${i}Score`).value) || 0;
+                const maxScore = parseFloat(document.getElementById(`activity${i}MaxScore`).value) || 1;
+                const weightedScore = (rawScore / maxScore * 10).toFixed(2);
 
                 totalScore += parseFloat(weightedScore);
+                totalMaxScore += 10; // Always considering the total as 10 for normalized score
 
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>Activity ${i}</td>
                     <td>${rawScore}</td>
+                    <td>${maxScore}</td>
                     <td>${weightedScore}</td>
                 `;
                 resultsTable.appendChild(row);
             }
 
             totalScoreElement.textContent = totalScore.toFixed(2);
+            totalMaxScoreElement.textContent = totalMaxScore;
         }
 
         // Initialize with 1 activity
